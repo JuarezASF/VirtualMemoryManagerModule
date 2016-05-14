@@ -1,0 +1,1 @@
+add_executable(configParser_test configParser_test.cpp ../src/ConfigParser.cpp ../src/ConfigParser.h)

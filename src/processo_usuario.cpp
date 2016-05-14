@@ -3,7 +3,7 @@
 Universidade de Brasília - UnB
 Departamento de Ciência da Computação - CIC
 Alunos: Gabriel Franklin Braz de Medeiros - 15/0126387
-        Juarez
+        Juarez Aires Samaio Filho 		  - 11/0032829
 
 Trabalho Prático para a disciplina de Sistemas Operacionais (01/2016)
 

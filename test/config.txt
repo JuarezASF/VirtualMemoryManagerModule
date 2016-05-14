@@ -1,0 +1,6 @@
+s_val    :    "juarez"
+
+
+d_val : 1.90
+i_val :         22
+        l_val : 0xFF00FF00FF00FF00
