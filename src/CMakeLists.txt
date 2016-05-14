@@ -2,3 +2,5 @@
 add_executable(PAP PageAllocationProccess.cpp ConfigParser.cpp ConfigParser.h)
 add_executable(StartAll StartAll.cpp ConfigParser.cpp ConfigParser.h)
 add_executable(ShutdownAll ShutdownAll.cpp ConfigParser.cpp ConfigParser.h)
+add_executable(main main.cpp)
+target_link_libraries(main -lrt -pthread)

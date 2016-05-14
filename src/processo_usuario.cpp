@@ -9,7 +9,7 @@ Trabalho Prático para a disciplina de Sistemas Operacionais (01/2016)
 
 Instruções:
 - Para compilar digite g++ processo_usuario.cpp -o programa
-- Para executar digite ./programa pag_processo_0
+- Para executar digite ./programa pag_processo_0.txt
 ********************************************************************/
 
 #include<iostream>
