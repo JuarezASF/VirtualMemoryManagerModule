@@ -1,2 +1,2 @@
 PAPQueueId : 0x1222
-PAPQueueSemaphorKey : 4643
+PAPQueueSemaphorKey : /sot1sem0
