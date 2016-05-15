@@ -3,6 +3,7 @@
 //
 
 #include "jMessageQueue.h"
+#include "AbstractProcess.h"
 #include <sys/sem.h>
 #include <sys/msg.h>
 #include <iostream>
@@ -35,11 +36,10 @@ void jMessageQueue::create(int key) {
 }
 
 void jMessageQueue::start(int key) {
-    if ((msgqid = msgget(key, 0664)) < 0) {
+    if ((msgqid = msgget(key, IPC_CREAT | 0664)) < 0) {
         std::cerr << "Failed when trying to start queue on key:" << key << endl;
         std::cerr << strerror(errno) << std::endl;
     }
-
 }
 
 void jMessageQueue::destroy() {
@@ -82,6 +82,18 @@ jMessageQueue::AnswerMsg jMessageQueue::getAnswer() {
     return m;
 }
 
+jMessageQueue::AnswerMsg jMessageQueue::getAnswer(int msgId) {
+
+    AnswerMsg m;
+    int length = sizeof(AnswerMsg) - sizeof(long);
+
+    if (msgrcv(msgqid, &m, length, msgId, 0) < 0) {
+        cerr << "Error while receiving msg!" << endl;
+        cerr << strerror(errno) << endl;
+    }
+
+    return m;
+}
 jMessageQueue::RequestMessage jMessageQueue::getRequest() {
     RequestMessage m;
     int length = sizeof(RequestMessage) - sizeof(long);
@@ -89,6 +101,9 @@ jMessageQueue::RequestMessage jMessageQueue::getRequest() {
     if (msgrcv(msgqid, &m, length, 0, 0) < 0) {
         cerr << "Error while receiving msg!" << endl;
         cerr << strerror(errno) << endl;
+
+        if (AbstractProcess::quitRequested)
+            exit(0);
     }
 
     return m;
@@ -97,6 +112,20 @@ jMessageQueue::RequestMessage jMessageQueue::getRequest() {
 void jMessageQueue::sendAnswer(int frame, int toQueueId) {
     AnswerMsg m;
     m.msgTypeId = jMessageQueue::anserMsgId;
+    m.frame = frame;
+
+    int length = sizeof(AnswerMsg) - sizeof(long);
+
+    if (msgsnd(toQueueId, &m, length, 0) < 0) {
+        cerr << "Error while sending msg!" << endl;
+        cerr << strerror(errno) << endl;
+    }
+
+}
+
+void jMessageQueue::sendAnswer(int frame, int toQueueId, int toMsgId) {
+    AnswerMsg m;
+    m.msgTypeId = toMsgId;
     m.frame = frame;
 
     int length = sizeof(AnswerMsg) - sizeof(long);

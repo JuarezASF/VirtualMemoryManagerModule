@@ -19,6 +19,7 @@ public:
         int pid;
         int page;
         int returnToQueueId;
+        int returnToMsgTypeId;
 
     } RequestMessage;
 
@@ -40,7 +41,9 @@ public:
     RequestMessage getRequest();
 
     static void sendAnswer(int frame, int toQueueId);
+    static void sendAnswer(int frame, int toQueueId, int toMsgId);
     AnswerMsg getAnswer();
+    AnswerMsg getAnswer(int withThisId);
 
 
 

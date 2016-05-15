@@ -45,7 +45,7 @@ void jLock::create(int key) {
 }
 
 void jLock::start(int key) {
-    if ((semid = semget(key, 1, IPC_CREAT | 0644)) < 0) {
+    if ((semid = semget(key, 1,0644)) < 0) {
         cerr << "Error creating semaphore!" << endl;
         cerr << strerror(errno) << endl;
 

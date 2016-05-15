@@ -22,7 +22,8 @@ int semid;
 
 int main(int argc, char **argv) {
 
-    ResourceManager* rm = ResourceManager::getInstance();
+    ResourceManager* rm = ResourceManager::getInstance(
+            (std::basic_string<char, char_traits<_CharT>, allocator<_CharT>>()));
     rm->loadConfig("config.txt");
 
 }

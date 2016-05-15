@@ -4,40 +4,59 @@
 
 #include "ResourceManager.h"
 
-#include "jLock.h"
 
-
-ResourceManager *ResourceManager::getInstance() {
-    static ResourceManager *instance = new ResourceManager();
+ResourceManager *ResourceManager::getInstance(string configFilename) {
+    static ResourceManager *instance = new ResourceManager(configFilename);
     return instance;
 }
 
-void ResourceManager::loadConfig(string filename) {
-    ConfigParser::loadConfig(filename);
+
+void ResourceManager::createAllResources() {
+    int serverQueueKey = ConfigParser::getInt("serverQueueKey");
+    int serverQueueLockKey = ConfigParser::getInt("serverQueueKey");
+    int serverAnswerKey = ConfigParser::getInt("serverAnswerKey");
+
+    pageRequestServerQueu->create(serverQueueKey);
+    serverAnswerQueue->create(serverAnswerKey);
+    serverQueueLock->create(serverQueueLockKey);
 
 }
 
-ResourceManager::ResourceManager() {
+void ResourceManager::startAllResources() {
+    int serverQueueKey = ConfigParser::getInt("serverQueueKey");
+    int serverQueueLockKey = ConfigParser::getInt("serverQueueKey");
+    int serverAnswerKey = ConfigParser::getInt("serverAnswerKey");
+
+    pageRequestServerQueu->start(serverQueueKey);
+    serverAnswerQueue->start(serverAnswerKey);
+    serverQueueLock->start(serverQueueLockKey);
+
+}
+
+void ResourceManager::destroyAllResources() {
+    pageRequestServerQueu->destroy();
+    serverAnswerQueue->destroy();
+    serverQueueLock->destroy();
 
 }
 
 
-void ResourceManager::initAllResources() {
-    int sem_key = ConfigParser::getInt("semkey");
-
-    jLock tableLock;
-    tableLock.create(sem_key);
-
-}
-
-void ResourceManager::clearAllResources() {
+ResourceManager::ResourceManager(string configFilename) {
+    ConfigParser::loadConfig(configFilename);
+    pageRequestServerQueu = new jMessageQueue();
+    serverAnswerQueue = new jMessageQueue();
+    serverQueueLock = new jLock();
 
 }
 
-jLock ResourceManager::getTableLock() {
-    int sem_key = ConfigParser::getInt("semkey");
+jMessageQueue *ResourceManager::getServerRequestQueue() {
+    return pageRequestServerQueu;
+}
 
-    jLock tableLock;
-    tableLock.start(sem_key);
-    tableLock;
+jLock *ResourceManager::getServerRequestLock() {
+    return serverQueueLock;
+}
+
+jMessageQueue *ResourceManager::getServerAnswertQueue() {
+    return serverAnswerQueue;
 }

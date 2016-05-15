@@ -9,6 +9,8 @@
 #define OCUPACAO_OK 8
 #define NUMERO_FRAMES 10
 
+#define QUANTIDADE_USR_PROCESSES 2
+
 
 #define INT_SIZE 4
 #define LONG_SIZE 4

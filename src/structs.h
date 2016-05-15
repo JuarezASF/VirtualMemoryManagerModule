@@ -13,6 +13,7 @@
 #include <errno.h>
 # include <unistd.h>
 #include <fcntl.h>           /* For O_* constants */
+#include "defines.h"
 
 
 #include <cstring>

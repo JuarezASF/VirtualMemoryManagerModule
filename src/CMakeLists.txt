@@ -1,6 +1,5 @@
 #add_executable(so1 main.cpp processo_usuario.cpp lru.cpp ConfigParser.cpp ConfigParser.h)
-add_executable(PAP PageAllocationProccess.cpp ConfigParser.cpp jMessageQueue.cpp)
-add_executable(StartAll StartAll.cpp ConfigParser.cpp ResourceManager.cpp jLock.cpp jSharesMemory.cpp)
-add_executable(ShutdownAll ShutdownAll.cpp ConfigParser.cpp)
+add_executable(StartAll initResources.cpp ConfigParser.cpp ResourceManager.cpp jLock.cpp jSharesMemory.cpp)
 add_executable(main main.cpp structs.cpp)
+add_executable(executeUserProcesses executeUserProcesses.cpp ChildProcess.cpp jMessageQueue.cpp ResourceManager.cpp ConfigParser.cpp jLock.cpp jSharesMemory.cpp AbstractProcess.cpp PageAllocationServer.cpp)
 target_link_libraries(main -lrt -pthread)

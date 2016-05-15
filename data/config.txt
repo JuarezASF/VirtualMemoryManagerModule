@@ -1,0 +1,3 @@
+serverQueueKey : 0x1234
+serverQueueLockKey : 0x1235
+serverAnswerKey : 0x1236
