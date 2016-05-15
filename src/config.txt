@@ -1,6 +1,1 @@
-PAPQueueKey : /sot1queue0
-PAPQueueSemaphorReaderKey : /sot1sem0
-PAPQueueSemaphorWriterKey : /sot1sem01
-
-PAPQtableKey : /sot1table0
-PAPQtableSemaphoreKey : /sot1sem1
+semkey : 0x01

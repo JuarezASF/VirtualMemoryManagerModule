@@ -5,40 +5,19 @@
 #include <sys/wait.h>           /* For O_* constants */
 #include <sys/mman.h>
 
-#include <fstream>
-#include <cstring>
-#include <ctime>
+#include "structs.h"
 
-#include "ConfigParser.h"
+#include <fstream>
+#include <ctime>
 
 using namespace std;
 
-#define MAX_OCUPACAO 9
-#define OCUPACAO_OK 8
-#define NUMERO_FRAMES 10
-#define INT_SIZE 4
-#define LONG_SIZE 4
-#define MAX_LONG 0x7FFFFFFFFFFFFFFFL
-#define MAX_INT 0x7FFFFFFF
 
 bool quitRequested = false;
 
 void foo(int d) {
 
 }
-
-typedef struct TableEntry {
-    int page;
-    long timestamp;
-    bool occupied;
-    int nextFree;
-} TableEntry;
-
-typedef struct PageFrameTable {
-    int qtdFree;
-    int pageFaultCount;
-    TableEntry table[NUMERO_FRAMES];
-} PageFrameTable;
 
 
 int shared_table;
@@ -68,7 +47,7 @@ int referencia_pagina(int i) {
     ((int *) childRequestBuffer)[0] = i;
     write(childRequestPipe[1], childRequestBuffer, INT_SIZE);
     read(serverResponsePipe[0], childRequestBuffer, INT_SIZE);
-    return ((int *)childRequestBuffer)[0];
+    return ((int *) childRequestBuffer)[0];
 
 }
 
@@ -138,8 +117,8 @@ int getFrameForPage(int page) {
     return -1;
 }
 
-void pageFaulCountIncr(){
-    ((PageFrameTable *)tablePtr)->pageFaultCount++;
+void pageFaulCountIncr() {
+    ((PageFrameTable *) tablePtr)->pageFaultCount++;
 }
 
 void clean_process_data() {
@@ -329,7 +308,7 @@ void execute_child(int idx) {
             if (out < 0) {
                 while (out < 0) {
                     pageFaulCountIncr();
-                    cout << "page fault for page:"  << page << endl;
+                    cout << "page fault for page:" << page << endl;
                     kill(pageSubstitutionProcessId, SIGUSR1);
                     signal(SIGUSR1, foo);
                     pause();

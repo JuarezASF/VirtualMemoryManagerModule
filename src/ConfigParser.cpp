@@ -54,7 +54,13 @@ long ConfigParser::getLong(string name) {
         cerr << " CANNOT FIND CONFIG PARAMATER " << name << endl;
         return -1;
     }
-    return stol(((string)config_map[name]).c_str());
+    string val = config_map[name];
+    if (val.find("0x", 0) >= 0)
+        return std::stol(((string)config_map[name]).c_str(), 0, 16);
+    else if(val[0] == '0')
+        return std::stol(((string)config_map[name]).c_str(), 0, 8);
+    else
+        return std::stol(((string)config_map[name]).c_str(), 0, 10);
 }
 
 string ConfigParser::getString(string name) {
