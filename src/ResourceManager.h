@@ -8,6 +8,7 @@
 #include <string>
 #include <iostream>
 #include "ConfigParser.h"
+#include "jLock.h"
 
 
 class ResourceManager {
@@ -26,6 +27,11 @@ public:
     void initAllResources();
 
     void clearAllResources();
+
+    /**
+     * Assumes another process has already created the lock
+     */
+    jLock getTableLock();
 
 
 };

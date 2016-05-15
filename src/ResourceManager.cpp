@@ -3,18 +3,9 @@
 //
 
 #include "ResourceManager.h"
-#include <sys/ipc.h>
-#include <sys/sem.h>
-#include <sys/types.h>
 
-#include <errno.h>
-# include <unistd.h>
-#include <fcntl.h>           /* For O_* constants */
-#include "structs.h"
 #include "jLock.h"
 
-
-#include <cstring>
 
 ResourceManager *ResourceManager::getInstance() {
     static ResourceManager *instance = new ResourceManager();
@@ -37,11 +28,16 @@ void ResourceManager::initAllResources() {
     jLock tableLock;
     tableLock.create(sem_key);
 
-
-
-
 }
 
 void ResourceManager::clearAllResources() {
 
+}
+
+jLock ResourceManager::getTableLock() {
+    int sem_key = ConfigParser::getInt("semkey");
+
+    jLock tableLock;
+    tableLock.start(sem_key);
+    tableLock;
 }
