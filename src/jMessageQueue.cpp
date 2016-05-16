@@ -101,9 +101,6 @@ jMessageQueue::RequestMessage jMessageQueue::getRequest() {
     if (msgrcv(msgqid, &m, length, 0, 0) < 0) {
         cerr << "Error while receiving msg!" << endl;
         cerr << strerror(errno) << endl;
-
-        if (AbstractProcess::quitRequested)
-            exit(0);
     }
 
     return m;

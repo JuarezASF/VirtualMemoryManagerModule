@@ -9,8 +9,9 @@
 #include <unordered_map>
 #include <set>
 #include "defines.h"
-#include "ChildProcess.h"
+#include "UserProcess.h"
 #include "PageAllocationServer.h"
+#include "PageSubstitutionServer.h"
 
 using namespace std;
 
@@ -44,6 +45,15 @@ int main(int argc, char **argv) {
         exit(0);
     }
 
+    //start page substitution server
+    cout << logStr << "start substitution server" << endl;
+    int substitutionServerPid;
+    if ((substitutionServerPid = fork()) == 0){
+        PageSubstitutionServer s(10001);
+        s.run();
+        exit(0);
+    }
+
     unordered_map<int, int> pidIdxMap;
     set<int> childIdxDone;
 
@@ -72,6 +82,11 @@ int main(int argc, char **argv) {
     //wait paging server to finish
     int status;
     int cpid = wait(&status);
+
+    //kill substitution server
+    kill(substitutionServerPid, SIGUSR2);
+    //wait substitution server to finish
+    cpid = wait(&status);
 
     cout << logStr << "DONE" << endl;
 

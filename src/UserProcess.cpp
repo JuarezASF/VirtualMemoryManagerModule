@@ -2,7 +2,7 @@
 // Created by jasf on 5/15/16.
 //
 
-#include "ChildProcess.h"
+#include "UserProcess.h"
 #include "ConfigParser.h"
 #include <iostream>
 
