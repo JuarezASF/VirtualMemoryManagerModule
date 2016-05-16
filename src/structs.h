@@ -30,7 +30,6 @@ typedef struct TableEntry {
     int page;
     long timestamp;
     bool occupied;
-    int nextFree;
 } TableEntry;
 
 typedef struct PageFrameTable {

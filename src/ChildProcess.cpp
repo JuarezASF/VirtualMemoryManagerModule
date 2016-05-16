@@ -37,17 +37,13 @@ void ChildProcess::run() {
 }
 
 void ChildProcess::referencia_pagina(int page) {
-
-    cout << logStr << "requesting page " << page << endl;
-
     serverQueueLock->acquire();
     serverRequestQueue->sendRequest(page, serverAnserQueue->msgqid);
-    serverQueueLock->release();
-
-    cout << logStr << "waiting for answer" << endl;
 
     jMessageQueue::AnswerMsg a = serverAnserQueue->getAnswer(this->pid);
 
-    cout << logStr << a.frame << endl;
+    cout << logStr << "page " << page << " mapped to frame " << a.frame << " with pagefault " << ((a.pagefault)? "TRUE" : "FALSE") << endl;
+    flush(cout);
+    serverQueueLock->release();
 
 }

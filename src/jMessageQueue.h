@@ -27,6 +27,7 @@ public:
     typedef struct AnswerMsg {
         long msgTypeId;
         int frame;
+        bool pagefault;
     } AnswerMsg;
 
     jMessageQueue();
@@ -41,7 +42,7 @@ public:
     RequestMessage getRequest();
 
     static void sendAnswer(int frame, int toQueueId);
-    static void sendAnswer(int frame, int toQueueId, int toMsgId);
+    static void sendAnswer(int frame, int toQueueId, int toMsgId, bool pageFault);
     AnswerMsg getAnswer();
     AnswerMsg getAnswer(int withThisId);
 

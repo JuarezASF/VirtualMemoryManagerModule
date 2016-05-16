@@ -123,10 +123,11 @@ void jMessageQueue::sendAnswer(int frame, int toQueueId) {
 
 }
 
-void jMessageQueue::sendAnswer(int frame, int toQueueId, int toMsgId) {
+void jMessageQueue::sendAnswer(int frame, int toQueueId, int toMsgId, bool pageFault) {
     AnswerMsg m;
     m.msgTypeId = toMsgId;
     m.frame = frame;
+    m.pagefault = pageFault;
 
     int length = sizeof(AnswerMsg) - sizeof(long);
 

@@ -9,12 +9,28 @@
 #include "AbstractProcess.h"
 
 class PageAllocationServer : public AbstractProcess{
+protected:
+
+    PageFrameTable *table;
+    jLock *tableLock;
+
+    void markFrameAsOcupied(int frame);
+
 
 public:
 
-    PageAllocationServer(int pidx);
+    PageAllocationServer(int pidx, bool zeroOutTable);
 
     void run();
+
+
+    int getFrameForPage(int page);
+
+    int emptyOldestPage();
+
+
+
+
 
 
 };
