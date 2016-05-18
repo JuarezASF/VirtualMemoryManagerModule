@@ -12,6 +12,8 @@
 #include "UserProcess.h"
 #include "PageAllocationServer.h"
 #include "PageSubstitutionServer.h"
+#include "ShutdownServer.h"
+
 
 using namespace std;
 
@@ -53,6 +55,17 @@ int main(int argc, char **argv) {
         s.run();
         exit(0);
     }
+
+     cout << logStr << "shutdown process" << endl;
+    int ShutdownPid;
+    if ((ShutdownPid = fork()) == 0){
+        ShutdownServer s(0);
+        s.run();
+        exit(0);
+    }
+
+
+
 
     unordered_map<int, int> pidIdxMap;
     set<int> childIdxDone;
@@ -102,6 +115,9 @@ int main(int argc, char **argv) {
     }
 
 
+
+
 }
+
 
 
