@@ -4,7 +4,7 @@
 
 Alunos
 
-Gabriel Franklim
+Gabriel Franklin Braz de Medeiros 15/0126387    gabriel.medeiros93@gmail.com
 
 Juarez Aires Sampaio Filho      11/0032829      juarez.asf@gmail.com
 
