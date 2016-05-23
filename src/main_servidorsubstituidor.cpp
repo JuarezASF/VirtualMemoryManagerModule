@@ -1,5 +1,5 @@
 //
-// Created by jasf on 5/15/16.
+// Modified by gfbm on 5/20/16.
 //
 
 #include <stdlib.h>
@@ -9,8 +9,6 @@
 #include <unordered_map>
 #include <set>
 #include "defines.h"
-#include "UserProcess.h"
-#include "PageAllocationServer.h"
 #include "PageSubstitutionServer.h"
 #include "ShutdownServer.h"
 
@@ -38,14 +36,7 @@ int main(int argc, char **argv) {
         wait(&s);
     }
 
-    //start page server
-    cout << logStr << "start paging server" << endl;
-    int pageServerPID;
-    if ((pageServerPID = fork()) == 0){
-        PageAllocationServer s(10000, true);
-        s.run();
-        exit(0);
-    }
+ 
 
     //start page substitution server
     cout << logStr << "start substitution server" << endl;
@@ -56,30 +47,12 @@ int main(int argc, char **argv) {
         exit(0);
     }
 
-     cout << logStr << "shutdown process" << endl;
-    int ShutdownPid;
-    if ((ShutdownPid = fork()) == 0){
-        ShutdownServer s(0);
-        s.run();
-        exit(0);
-    }
-
+   
 
 
 
     unordered_map<int, int> pidIdxMap;
     set<int> childIdxDone;
-
-    for (int i = 0; i < qtdProcess; i++) {
-        if ((child_id = fork()) == 0) {
-            ChildProcess p(i);
-            p.run();
-            exit(0);
-        } else {
-            pidIdxMap[child_id] = i;
-            cout << logStr << "started process:#" << i << " pid:" << child_id << endl;
-        }
-    }
 
     cout << logStr << "waiting for childs" << endl;
     for (int i = 0; i < qtdProcess; i++) {
@@ -90,14 +63,12 @@ int main(int argc, char **argv) {
         cout << logStr << "child pid:" << cpid << " idx:" << cidx << " OK" << endl;
     }
 
-    //kill page server
-    kill(pageServerPID, SIGUSR2);
-    //wait paging server to finish
+   
     int status;
     int cpid = wait(&status);
 
     //kill substitution server
-    kill(substitutionServerPid, SIGUSR2);
+   kill(substitutionServerPid, SIGUSR2);
     //wait substitution server to finish
     cpid = wait(&status);
 
