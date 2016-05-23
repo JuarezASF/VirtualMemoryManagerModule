@@ -24,6 +24,13 @@ AbstractProcess::AbstractProcess(int pidx) {
     ppid = getppid();
     this->pidx = pidx;
 
+    PIDTable * pidTable = rm->getPIDTable();
+    rm->getPIDTableLock()->acquire();
+    pidTable->pids[pidTable->qtdUsedEntries] = getpid();
+    pidTable->qtdUsedEntries++;
+    rm->getPIDTableLock()->release();
+
+
 
 }
 

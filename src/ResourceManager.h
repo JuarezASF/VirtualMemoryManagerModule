@@ -14,6 +14,7 @@
 #include "jSharesMemory.h"
 
 typedef struct PageFrameTable PageFrameTable;
+typedef struct PIDTable PIDTable;
 
 class ResourceManager {
 
@@ -25,9 +26,10 @@ private:
 
     jMessageQueue *serverRequestQueue, *serverAnswerQueue;
     jLock *serverQueueLock;
-    jSharesMemory *tableSharedMemory;
+    jSharesMemory *tableSharedMemory, *pidSharedMemory;
     PageFrameTable *table;
-    jLock *tableLock;
+    PIDTable *pidTable;
+    jLock *tableLock, *pidSharedMemoryLock;
 
 public:
 
@@ -56,6 +58,11 @@ public:
     PageFrameTable *getTable();
 
     jLock * getTableLock();
+
+    PIDTable *getPIDTable();
+    jLock *getPIDTableLock();
+
+    void printPIDTable();
 
 
 };

@@ -28,6 +28,8 @@ public:
 
     int emptyOldestPage();
 
+    void printTable();
+
 
 
 

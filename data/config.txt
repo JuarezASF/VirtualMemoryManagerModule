@@ -3,3 +3,5 @@ serverQueueLockKey : 0x1235
 serverAnswerKey : 0x1236
 tableSharedMemoryKey : 0x1237
 tableLockKey : 0x1238
+sharedPIDTableKey : 0x1239
+sharedPIDTableLockKey : 0x1240

@@ -21,15 +21,18 @@ PageSubstitutionServer::PageSubstitutionServer(int pidx) : PageAllocationServer(
 void PageSubstitutionServer::run() {
 
     while (!quitRequested) {
-        if (sleep(PAGE_SUBS_SLEEP_TIME) < 0) {
+        if (usleep(PAGE_SUBS_SLEEP_TIME) < 0) {
             cerr << strerror(errno) << endl;
         }
 
-        if (table->qtdFree >= MAX_OCUPACAO) {
+        if ((NUMERO_FRAMES - table->qtdFree) >= MAX_OCUPACAO) {
             cout << logStr << "starting to free some space" << endl;
             qtdSubstituitonTookPlace++;
-            while (table->qtdFree >= OCUPACAO_OK)
+            while ((NUMERO_FRAMES - table->qtdFree) >= OCUPACAO_OK){
+                printTable();
                 this->emptyOldestPage();
+
+            }
         }
 
     }

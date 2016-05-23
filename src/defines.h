@@ -11,7 +11,8 @@
 
 #define QUANTIDADE_USR_PROCESSES 1
 
-#define PAGE_SUBS_SLEEP_TIME 1
+//in unites of microsecond [10^4 usec = 0.01 sec]
+#define PAGE_SUBS_SLEEP_TIME 10000
 
 
 #define INT_SIZE 4
@@ -20,5 +21,7 @@
 
 #define MAX_LONG 0x7FFFFFFFFFFFFFFFL
 #define MAX_INT 0x7FFFFFFF
+
+#define MAX_NUMERO_PROCESSOS 1024
 
 #endif //VIRTUALMEMORYMANAGER_DEFINES_H

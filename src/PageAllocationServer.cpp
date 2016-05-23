@@ -112,3 +112,17 @@ void PageAllocationServer::markFrameAsOcupied(int frame) {
     table->qtdFree--;
 
 }
+
+void PageAllocationServer::printTable() {
+    cout << "page fault count:" << table->pageFaultCount << endl;
+    cout << "qtd frame free:" << table->qtdFree << endl;
+
+    cout << "table" << endl;
+    cout << "\tframe\tpage\ttimestamp\toccupied" << endl;
+    for (uint k = 0; k < NUMERO_FRAMES; k++) {
+        cout << "\t" << k << "\t" << table->table[k].page << "\t" << table->table[k].timestamp << "\t" <<
+                ((table->table[k].occupied) ? "true" : "false") << endl;
+    }
+
+
+}

@@ -38,4 +38,9 @@ typedef struct PageFrameTable {
     TableEntry table[NUMERO_FRAMES];
 } PageFrameTable;
 
+typedef struct PIDTable {
+    int qtdUsedEntries;
+    long pids[MAX_NUMERO_PROCESSOS];
+} PIDTable;
+
 #endif //VIRTUALMEMORYMANAGER_STRUCTS_H

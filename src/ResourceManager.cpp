@@ -26,6 +26,17 @@ void ResourceManager::createAllResources() {
     table = (PageFrameTable *) tableSharedMemory->ptr;
     tableLock->create(tableLockKey);
 
+    int pidTableKey = ConfigParser::getInt("sharedPIDTableKey");
+    pidSharedMemory->create(pidTableKey, sizeof(PIDTable));
+    pidTable = (PIDTable *) pidSharedMemory->ptr;
+
+    int pidTableLockKey = ConfigParser::getInt("sharedPIDTableLockKey");
+    pidSharedMemoryLock->create(pidTableLockKey);
+
+
+
+
+
 }
 
 void ResourceManager::startAllResources() {
@@ -43,6 +54,13 @@ void ResourceManager::startAllResources() {
     table = (PageFrameTable *) tableSharedMemory->ptr;
     tableLock->start(tableLockKey);
 
+    int pidTableKey = ConfigParser::getInt("sharedPIDTableKey");
+    pidSharedMemory->start(pidTableKey, sizeof(PIDTable));
+    pidTable = (PIDTable *) pidSharedMemory->ptr;
+
+    int pidTableLockKey = ConfigParser::getInt("sharedPIDTableLockKey");
+    pidSharedMemoryLock->start(pidTableLockKey);
+
 }
 
 void ResourceManager::destroyAllResources() {
@@ -57,6 +75,11 @@ void ResourceManager::destroyAllResources() {
 
     table = nullptr;
 
+    pidSharedMemory->destroy();
+    pidSharedMemoryLock->destroy();
+
+    pidTable = nullptr;
+
 }
 
 
@@ -69,6 +92,10 @@ ResourceManager::ResourceManager(string configFilename) {
     tableSharedMemory = new jSharesMemory();
 
     table = nullptr;
+
+    pidSharedMemory = new jSharesMemory();
+    pidSharedMemoryLock = new jLock();
+
 }
 
 ResourceManager::~ResourceManager() {
@@ -77,6 +104,8 @@ ResourceManager::~ResourceManager() {
     delete serverQueueLock;
     delete tableLock;
     delete tableSharedMemory;
+    delete pidSharedMemory;
+    delete pidSharedMemoryLock;
 
 }
 
@@ -100,3 +129,24 @@ jLock *ResourceManager::getTableLock() {
     return tableLock;
 }
 
+PIDTable *ResourceManager::getPIDTable() {
+    return pidTable;
+}
+
+jLock *ResourceManager::getPIDTableLock() {
+    return pidSharedMemoryLock;
+}
+
+void ResourceManager::printPIDTable() {
+
+    cout << "PID TABLE" << endl;
+
+    int qtd = pidTable->qtdUsedEntries;
+    cout << "qtd used entries: " << qtd << endl;
+
+    cout << "used pids" << endl;
+    for (uint k = 0; k < qtd; k++)
+        cout << pidTable->pids[k] << ",";
+    cout << endl;
+
+}
