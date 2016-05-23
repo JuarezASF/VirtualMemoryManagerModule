@@ -4,7 +4,7 @@
 
 #include "PageAllocationServer.h"
 
-PageAllocationServer::PageAllocationServer(int pidx, bool zeroOutTable) : AbstractProcess(pidx) {
+PageAllocationServer::PageAllocationServer(bool zeroOutTable) : AbstractProcess() {
     logStr = "[page alloc server]";
 
 
@@ -14,7 +14,6 @@ PageAllocationServer::PageAllocationServer(int pidx, bool zeroOutTable) : Abstra
     //zero out table
     if (zeroOutTable) {
         table->qtdFree = NUMERO_FRAMES;
-        table->pageFaultCount = 0;
         for (int k = 0; k < NUMERO_FRAMES; k++) {
             table->table[k].page = 0;
             table->table[k].occupied = false;
@@ -22,6 +21,10 @@ PageAllocationServer::PageAllocationServer(int pidx, bool zeroOutTable) : Abstra
         }
 
     }
+
+    //it does not make sense to keep page count for allocation and substitution server
+    PIDTable * pidTable = rm->getPIDTable();
+    pidTable->pageFaultCount[idxOnPIDTable] = 0;
 
     cout << logStr << "started" << endl;
 
@@ -33,48 +36,57 @@ void PageAllocationServer::run() {
         jMessageQueue::RequestMessage r = serverRequestQueue->getRequest();
 
         bool pageFault = false;
+        int allocatedFrame;
         int page = r.page;
         flush(cout);
+        cout << "table before request for page " << page << endl;
+        printTable();
 
         tableLock->acquire();
-        int frame = getFrameForPage(page);
+        frameInfo info = getFrameForPage(page);
         tableLock->release();
-        if (frame < 0) {
-            pageFault = true;
-            table->pageFaultCount = table->pageFaultCount + 1;
+        pageFault = info.pagefault;
+        allocatedFrame = info.frame;
+        if(info.pagefault){
             cout << logStr << "PAGE FAULT on request for page " << page << endl;
-            frame = emptyOldestPage();
+            //increase count on total pagefault count at the PIDTable
+            pidTableLock->acquire();
+            pidTable->pageFaultCount[idxOnPIDTable] += 1;
+            pidTableLock->release();
 
-            if (frame < 0) {
-                cerr << "TREMENDOUS ERROR! FIX ME" << endl;
-                frame = 0;
+            //means there is a page frame and we don't know where to place the new entry
+            if(info.frame < 0){
+                allocatedFrame = emptyOldestPage();
             }
+            if (allocatedFrame < 0) {
+                cerr << "TREMENDOUS ERROR! FIX ME" << endl;
+                allocatedFrame = 0;
+            }
+
+            cout << logStr << "PAGE FAULT resolved by allocating frame " << allocatedFrame << " for page" << page << endl;
+
         }
 
-        markFrameAsOcupied(frame);
-        flush(cout);
+        markFrameAsOcupied(allocatedFrame, page);
 
-        jMessageQueue::sendAnswer(frame, serverAnserQueue->msgqid, r.pid, pageFault);
-
+        jMessageQueue::sendAnswer(allocatedFrame, serverAnserQueue->msgqid, r.pid, pageFault);
 
     }
 
 
 }
 
-int PageAllocationServer::getFrameForPage(int page) {
-    if (table->qtdFree <= 0)
-        return -1;
-
+PageAllocationServer::frameInfo PageAllocationServer::getFrameForPage(int page) {
     int out = -1;
+
     for (int k = 0; k < NUMERO_FRAMES; k++) {
         if (table->table[k].page == page && table->table[k].occupied)
-            return k;
+            return PageAllocationServer::frameInfo(k, false);
         if (!table->table[k].occupied)
             out = k;
     }
 
-    return out;
+    return PageAllocationServer::frameInfo(out, true);
 }
 
 int PageAllocationServer::emptyOldestPage() {
@@ -102,11 +114,12 @@ int PageAllocationServer::emptyOldestPage() {
     return oldestIdx;
 }
 
-void PageAllocationServer::markFrameAsOcupied(int frame) {
+void PageAllocationServer::markFrameAsOcupied(int frame, int page) {
     if (frame < 0) {
         cerr << "TREMENDOUS ERROR! FIX ME" << endl;
         frame = 0;
     }
+    table->table[frame].page = page;
     table->table[frame].occupied = true;
     table->table[frame].timestamp = (long) time(NULL);
     table->qtdFree--;
@@ -114,7 +127,6 @@ void PageAllocationServer::markFrameAsOcupied(int frame) {
 }
 
 void PageAllocationServer::printTable() {
-    cout << "page fault count:" << table->pageFaultCount << endl;
     cout << "qtd frame free:" << table->qtdFree << endl;
 
     cout << "table" << endl;

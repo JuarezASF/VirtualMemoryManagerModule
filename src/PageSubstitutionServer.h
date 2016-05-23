@@ -9,7 +9,7 @@
 
 class PageSubstitutionServer : public PageAllocationServer{
 public:
-    PageSubstitutionServer(int pidx);
+    PageSubstitutionServer();
     int qtdSubstituitonTookPlace;
 
     void run();

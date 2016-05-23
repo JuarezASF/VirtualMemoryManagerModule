@@ -14,7 +14,7 @@
 
 using namespace std;
 
-class ChildProcess : public AbstractProcess {
+class UserProcess : public AbstractProcess {
 private:
 
     ifstream is;
@@ -24,7 +24,7 @@ private:
 
 public:
 
-    ChildProcess(int pidx);
+    UserProcess(string filename);
 
     void run();
 

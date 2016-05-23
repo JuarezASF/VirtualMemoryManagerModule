@@ -8,8 +8,7 @@
 
 using namespace std;
 
-ChildProcess::ChildProcess(int pidx) : AbstractProcess(pidx){
-    string filename = "pag_processo_" + to_string(pidx) + ".txt";
+UserProcess::UserProcess(string filename) : AbstractProcess() {
     is.open(filename.c_str());
     if (!is.is_open()) {
         cerr << logStr << "could not open file " << filename << endl;
@@ -18,9 +17,10 @@ ChildProcess::ChildProcess(int pidx) : AbstractProcess(pidx){
 
 }
 
-void ChildProcess::run() {
+void UserProcess::run() {
     int pag;
     while (is.is_open()) {
+        usleep(USER_USLEEP_TIPE);
         if (is.eof())
             break;
         is >> pag;
@@ -36,13 +36,20 @@ void ChildProcess::run() {
 
 }
 
-void ChildProcess::referencia_pagina(int page) {
+void UserProcess::referencia_pagina(int page) {
     serverQueueLock->acquire();
     serverRequestQueue->sendRequest(page, serverAnserQueue->msgqid);
 
     jMessageQueue::AnswerMsg a = serverAnserQueue->getAnswer(this->pid);
 
     cout << logStr << "page " << page << " mapped to frame " << a.frame << " with pagefault " << ((a.pagefault)? "TRUE" : "FALSE") << endl;
+    if (a.pagefault){
+        // increase pagefault count on this user process
+        rm->getPIDTableLock()->acquire();
+        pidTable->pageFaultCount[idxOnPIDTable] += 1;
+        rm->getPIDTableLock()->release();
+
+    }
     flush(cout);
     serverQueueLock->release();
 

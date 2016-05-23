@@ -34,13 +34,14 @@ typedef struct TableEntry {
 
 typedef struct PageFrameTable {
     int qtdFree;
-    int pageFaultCount;
     TableEntry table[NUMERO_FRAMES];
 } PageFrameTable;
 
 typedef struct PIDTable {
     int qtdUsedEntries;
     long pids[MAX_NUMERO_PROCESSOS];
+    long pageFaultCount[MAX_NUMERO_PROCESSOS];
+    long initialTimestamp;
 } PIDTable;
 
 #endif //VIRTUALMEMORYMANAGER_STRUCTS_H

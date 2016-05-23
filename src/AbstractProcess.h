@@ -15,15 +15,19 @@ using namespace std;
 class AbstractProcess {
 protected:
 
-    int pidx, pid, ppid;
+    int pid, ppid;
     static string logStr;
     ResourceManager *rm;
     jMessageQueue *serverRequestQueue, *serverAnserQueue;
-    jLock *serverQueueLock;
+    jLock *serverQueueLock, *pidTableLock;
+    PIDTable * pidTable;
+
+
+    int idxOnPIDTable;
 
 
 public:
-    AbstractProcess(int pidx);
+    AbstractProcess();
 
     virtual void run() = 0;
 

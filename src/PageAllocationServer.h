@@ -11,20 +11,27 @@
 class PageAllocationServer : public AbstractProcess{
 protected:
 
+    typedef struct frameInfo{
+        int frame;
+        bool pagefault;
+
+        frameInfo(int d, bool b) : frame(d), pagefault(b){}
+    }frameInfo;
+
     PageFrameTable *table;
     jLock *tableLock;
 
-    void markFrameAsOcupied(int frame);
+    void markFrameAsOcupied(int frame, int page);
 
 
 public:
 
-    PageAllocationServer(int pidx, bool zeroOutTable);
+    PageAllocationServer(bool zeroOutTable);
 
     void run();
 
 
-    int getFrameForPage(int page);
+    frameInfo getFrameForPage(int page);
 
     int emptyOldestPage();
 

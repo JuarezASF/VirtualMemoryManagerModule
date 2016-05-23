@@ -35,6 +35,27 @@ int main(int argc, char **argv) {
         kill(toKillPid, SIGUSR2);
     }
 
+    cout << "[Required Execution Log]start" << endl;
+
+    for (uint k = 2; k < pidTable->qtdUsedEntries; k++){
+        cout << "Numero de page faults do processo " << k-2 << ":" << pidTable->pageFaultCount[k] << endl;
+
+    }
+
+    cout << "Numero de page faults total:" << pidTable->pageFaultCount[0] << endl;
+
+    cout << "Numero de execucoes do processo de substituicao:" << pidTable->pageFaultCount[1] << endl;
+
+    PageFrameTable *t = rm->getTable();
+    cout << "Configuracao final da memoria" << endl;
+    cout << "Pagina\tTempo(relativo) de referencia" << endl;
+    for (uint k = 0; k < NUMERO_FRAMES; k++){
+        cout << t->table[k].page << "\t" << t->table[k].timestamp - pidTable->initialTimestamp << endl;
+
+    }
+
+    cout << "[Required Execution Log]end" << endl;
+
     cout << logStr << "destroying resources" << endl;
 
     rm->destroyAllResources();

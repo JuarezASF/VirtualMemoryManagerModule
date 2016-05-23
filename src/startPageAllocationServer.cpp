@@ -35,6 +35,7 @@ int main(int argc, char **argv) {
 
         rm->getPIDTableLock()->acquire();
         p->qtdUsedEntries = 0;
+        p->initialTimestamp = time(NULL);
         rm->getPIDTableLock()->release();
 
         rm->printPIDTable();
@@ -47,7 +48,7 @@ int main(int argc, char **argv) {
 
 
     cout << logStr << "start paging server" << endl;
-    PageAllocationServer s(10000, true);
+    PageAllocationServer s(true);
     s.run();
 
     return 0;
