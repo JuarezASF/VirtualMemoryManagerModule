@@ -34,6 +34,7 @@ private:
 public:
 
     static ResourceManager *getInstance(string configFilename);
+
     virtual ~ResourceManager();
 
     /**
@@ -57,9 +58,10 @@ public:
 
     PageFrameTable *getTable();
 
-    jLock * getTableLock();
+    jLock *getTableLock();
 
     PIDTable *getPIDTable();
+
     jLock *getPIDTableLock();
 
     void printPIDTable();

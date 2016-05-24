@@ -3,8 +3,6 @@
 //
 
 #include "UserProcess.h"
-#include "ConfigParser.h"
-#include <iostream>
 
 using namespace std;
 
@@ -43,11 +41,11 @@ void UserProcess::referencia_pagina(int page) {
     jMessageQueue::AnswerMsg a = serverAnserQueue->getAnswer(this->pid);
 
     cout << logStr << "page " << page << " mapped to frame " << a.frame;
-    if(a.pagefault)
+    if (a.pagefault)
         cout << " with pagefault";
     cout << endl;
 
-    if (a.pagefault){
+    if (a.pagefault) {
         // increase pagefault count on this user process
         rm->getPIDTableLock()->acquire();
         pidTable->pageFaultCount[idxOnPIDTable] += 1;

@@ -35,19 +35,18 @@ AbstractProcess::AbstractProcess() {
     //synchronized since we're adding new entries to shared pid table
     pidTableLock->acquire();
 
-        idxOnPIDTable = pidTable->qtdUsedEntries;
-        pidTable->pids[idxOnPIDTable] = getpid();
-        pidTable->pageFaultCount[idxOnPIDTable] = 0;
-        pidTable->qtdUsedEntries++;
+    idxOnPIDTable = pidTable->qtdUsedEntries;
+    pidTable->pids[idxOnPIDTable] = getpid();
+    pidTable->pageFaultCount[idxOnPIDTable] = 0;
+    pidTable->qtdUsedEntries++;
 
     pidTableLock->release();
-
 
 
 }
 
 void AbstractProcess::onSIGUSR2(int d) {
     AbstractProcess::quitRequested = true;
-    cout << logStr <<  "quit requested" << endl;
+    cout << logStr << "quit requested" << endl;
     exit(0);
 }

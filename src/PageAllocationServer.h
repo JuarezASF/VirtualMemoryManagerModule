@@ -8,15 +8,15 @@
 
 #include "AbstractProcess.h"
 
-class PageAllocationServer : public AbstractProcess{
+class PageAllocationServer : public AbstractProcess {
 protected:
 
-    typedef struct frameInfo{
+    typedef struct frameInfo {
         int frame;
         bool pagefault;
 
-        frameInfo(int d, bool b) : frame(d), pagefault(b){}
-    }frameInfo;
+        frameInfo(int d, bool b) : frame(d), pagefault(b) { }
+    } frameInfo;
 
     PageFrameTable *table;
     jLock *tableLock;
@@ -65,10 +65,6 @@ public:
     int emptyOldestPage();
 
     void printTable();
-
-
-
-
 
 
 };

@@ -19,6 +19,7 @@ private:
 public:
 
     jLock();
+
     virtual ~jLock();
 
     void create(int key);

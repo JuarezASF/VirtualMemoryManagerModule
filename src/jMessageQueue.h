@@ -39,13 +39,16 @@ public:
     void destroy();
 
     void sendRequest(int pageRequested, int answerToQueueId);
+
     RequestMessage getRequest();
 
     static void sendAnswer(int frame, int toQueueId);
-    static void sendAnswer(int frame, int toQueueId, int toMsgId, bool pageFault);
-    AnswerMsg getAnswer();
-    AnswerMsg getAnswer(int withThisId);
 
+    static void sendAnswer(int frame, int toQueueId, int toMsgId, bool pageFault);
+
+    AnswerMsg getAnswer();
+
+    AnswerMsg getAnswer(int withThisId);
 
 
 };

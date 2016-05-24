@@ -7,9 +7,10 @@
 
 #include "PageAllocationServer.h"
 
-class PageSubstitutionServer : public PageAllocationServer{
+class PageSubstitutionServer : public PageAllocationServer {
 public:
     PageSubstitutionServer();
+
     /**
      * Page substitution main loop:
      *

@@ -34,9 +34,6 @@ void ResourceManager::createAllResources() {
     pidSharedMemoryLock->create(pidTableLockKey);
 
 
-
-
-
 }
 
 void ResourceManager::startAllResources() {

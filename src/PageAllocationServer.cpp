@@ -24,7 +24,7 @@ PageAllocationServer::PageAllocationServer(bool zeroOutTable) : AbstractProcess(
     }
 
     //it does not make sense to keep page count for allocation and substitution server
-    PIDTable * pidTable = rm->getPIDTable();
+    PIDTable *pidTable = rm->getPIDTable();
     pidTable->pageFaultCount[idxOnPIDTable] = 0;
 
 }
@@ -45,7 +45,7 @@ void PageAllocationServer::run() {
 
         pageFault = info.pagefault;
         allocatedFrame = info.frame;
-        if(info.pagefault){
+        if (info.pagefault) {
             cout << logStr << "PAGE FAULT on request for page " << page << endl;
 
             //increase count on total pagefault count at the PIDTable
@@ -54,7 +54,7 @@ void PageAllocationServer::run() {
             pidTableLock->release();
 
             //means there is a page frame and we don't know where to place the new entry
-            if(info.frame < 0){
+            if (info.frame < 0) {
                 allocatedFrame = emptyOldestPage();
             }
             if (allocatedFrame < 0) {
@@ -63,7 +63,8 @@ void PageAllocationServer::run() {
                 allocatedFrame = 0;
             }
 
-            cout << logStr << "PAGE FAULT resolved by allocating frame " << allocatedFrame << " for page" << page << endl;
+            cout << logStr << "PAGE FAULT resolved by allocating frame " << allocatedFrame << " for page" << page <<
+            endl;
 
         }
 
@@ -104,12 +105,12 @@ int PageAllocationServer::emptyOldestPage() {
     }
 
     if (oldestIdx >= 0) {
-        if (table->table[oldestIdx].occupied){
+        if (table->table[oldestIdx].occupied) {
             table->table[oldestIdx].occupied = false;
             table->qtdFree += 1;
         }
-        else{
-            cerr <<logStr << "ERROR! TRYING TO FREE A NON OCCUPIED FRAME! THIS IS PROBABLY AN ERROR!" << endl;
+        else {
+            cerr << logStr << "ERROR! TRYING TO FREE A NON OCCUPIED FRAME! THIS IS PROBABLY AN ERROR!" << endl;
         }
     }
     else {
@@ -128,7 +129,7 @@ void PageAllocationServer::markFrameAsOcupied(int frame, int page) {
     tableLock->acquire();
     table->table[frame].page = page;
     table->table[frame].timestamp = timeCounter++;
-    if(!table->table[frame].occupied){
+    if (!table->table[frame].occupied) {
         table->qtdFree -= 1;
     }
     table->table[frame].occupied = true;
@@ -143,7 +144,7 @@ void PageAllocationServer::printTable() {
     cout << "\tframe\tpage\ttimestamp\toccupied" << endl;
     for (uint k = 0; k < NUMERO_FRAMES; k++) {
         cout << "\t" << k << "\t" << table->table[k].page << "\t" << table->table[k].timestamp << "\t" <<
-                ((table->table[k].occupied) ? "true" : "false") << endl;
+        ((table->table[k].occupied) ? "true" : "false") << endl;
     }
 
 

@@ -14,7 +14,7 @@ using namespace std;
 
 void execute_child(int idx);
 
-void foo(int d){}
+void foo(int d) { }
 
 int main(int argc, char **argv) {
 
@@ -23,7 +23,7 @@ int main(int argc, char **argv) {
     // create all resources from scratch
     //  this is done on another process for compatilibity with the first verion of this code
     // when everything was done in one huge main
-    if (fork() == 0){
+    if (fork() == 0) {
         ResourceManager *rm = ResourceManager::getInstance("config.txt");
         rm->createAllResources();
 
@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
         rm->getPIDTableLock()->release();
 
         exit(0);
-    }else{
+    } else {
         int s;
         wait(&s);
     }

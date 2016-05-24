@@ -1,6 +1,6 @@
 add_executable(startPageAlloc startPageAllocationServer.cpp jMessageQueue.cpp ResourceManager.cpp ConfigParser.cpp jLock.cpp jSharesMemory.cpp AbstractProcess.cpp PageAllocationServer.cpp PageSubstitutionServer.cpp)
 add_executable(startPageSubst startPageSubstitutionServer.cpp jMessageQueue.cpp ResourceManager.cpp ConfigParser.cpp jLock.cpp jSharesMemory.cpp AbstractProcess.cpp PageAllocationServer.cpp PageSubstitutionServer.cpp)
-add_executable(startUserProcess startUserProcess.cpp  jMessageQueue.cpp ResourceManager.cpp ConfigParser.cpp jLock.cpp jSharesMemory.cpp AbstractProcess.cpp PageAllocationServer.cpp PageSubstitutionServer.cpp UserProcess.cpp)
+add_executable(startUserProcess startUserProcess.cpp jMessageQueue.cpp ResourceManager.cpp ConfigParser.cpp jLock.cpp jSharesMemory.cpp AbstractProcess.cpp PageAllocationServer.cpp PageSubstitutionServer.cpp UserProcess.cpp)
 add_executable(shutdownAll shutdownAll.cpp jMessageQueue.cpp ResourceManager.cpp ConfigParser.cpp jLock.cpp jSharesMemory.cpp AbstractProcess.cpp PageAllocationServer.cpp PageSubstitutionServer.cpp)
 target_link_libraries(startPageAlloc -lrt -pthread)
 target_link_libraries(startPageSubst -lrt -pthread)

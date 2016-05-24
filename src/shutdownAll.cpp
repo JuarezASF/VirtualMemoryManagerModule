@@ -43,7 +43,8 @@ int main(int argc, char **argv) {
     cout << "Configuracao final da memoria" << endl;
     cout << "Frame\t\tPagina\t\t\tTempo(relativo) de referencia" << endl;
     for (uint k = 0; k < NUMERO_FRAMES; k++) {
-        cout << k << "\t" << ((t->table[k].occupied)? to_string(t->table[k].page) : "Livre") << "\t" << t->table[k].timestamp << endl;
+        cout << k << "\t" << ((t->table[k].occupied) ? to_string(t->table[k].page) : "Livre") << "\t" <<
+        t->table[k].timestamp << endl;
 
     }
 

@@ -9,6 +9,8 @@ Juarez Aires Sampaio Filho      11/0032829      juarez.asf@gmail.com
 Gabriel Franklin Braz de Medeiros 15/0126387    gabriel.medeiros93@gmail.com
 
 
+Trabalho disponível  [aqui](https://github.com/JuarezASF/VirtualMemoryManagerModule) 
+
 ## Trabalho 1 - Gerente de Memória Virtual
 
 ### 1. Sistema de Desenvolvimento
@@ -157,66 +159,66 @@ as informações das páginas que deve referencias.
 
 4.1 Processo usuário <-> servidor de alocação de mensagem
 
-    Os processos de usuário mandam pedidos de alocação para o processo
-    servidor alocador de páginas por meio de uma fila de mensagem. A
-    mensagem que o processo de usuário envia contém o PID do processo
-    requerente. Para um dado pedido, o servidor aloca um frame e
-    coloca uma mensagem de reposta em uma segunda fila de mensagens.
-    Essa mensagem de resposta possui um identificador de mensagem
-    igual a PID do processo a que se destina. A mensagem de resposta
-    também indica se o servidor de memória passou por um pagefault
-    durante aquele pedido. O servidor de alocação de páginas lê a fila
-    de entrada sequencialmente.
+Os processos de usuário mandam pedidos de alocação para o processo
+servidor alocador de páginas por meio de uma fila de mensagem. A
+mensagem que o processo de usuário envia contém o PID do processo
+requerente. Para um dado pedido, o servidor aloca um frame e
+coloca uma mensagem de reposta em uma segunda fila de mensagens.
+Essa mensagem de resposta possui um identificador de mensagem
+igual a PID do processo a que se destina. A mensagem de resposta
+também indica se o servidor de memória passou por um pagefault
+durante aquele pedido. O servidor de alocação de páginas lê a fila
+de entrada sequencialmente.
 
 
 
 4.2 servidor de alocação de mensagem  <-> servidor de substituição de páginas
 
-    Ambos os servidores manipulam uma tabela contendo informação dos
-    frames. Essa tabela está em memória compartilhada. Para
-    sincronizar o acesso a memória existe um semáforo. O processo que
-    quer acessar a tabela ( para leitura ou para escrita ) adquire o
-    semáforo e faz as operações que são necessárias. Quando não
-    precisa mais da tabela, o processo libera o semáforo.
+Ambos os servidores manipulam uma tabela contendo informação dos
+frames. Essa tabela está em memória compartilhada. Para
+sincronizar o acesso a memória existe um semáforo. O processo que
+quer acessar a tabela ( para leitura ou para escrita ) adquire o
+semáforo e faz as operações que são necessárias. Quando não
+precisa mais da tabela, o processo libera o semáforo.
 
 
 4.2 Servidor de substituição
 
-    O processo de substituição é ativado periodicamente. A chamda de
-    sistema usleep é utilizada para indicar tempo de espera com
-    precisão de microsegundos.
+O processo de substituição é ativado periodicamente. A chamda de
+sistema usleep é utilizada para indicar tempo de espera com
+precisão de microsegundos.
 
 4.3 Processo de shutdown <-> outros processos
 
-    Cada processo registra em seu construtor uma resposta ao sinal
-    SIGUSR2. Ao receber esse sinal os processos de usuário, servidor
-    de alocação e substituição de páginas encerram suas atividades
-    imediatamente por meio da chamada exit.
-    
-    Para que isso ocorra, o processo de shutdown precisa conhecer o
-    PID dos processos que precisa encerrar. Para isso se utiliza ourta
-    estrutura compartilhada: uma tabela em memória compartilhada
-    contendo informação do PID de cada processo e informação de
-    pagefault. 
-    
-    Nessa tabela a primeira entrada é referente ao processo servidor
-    alocador; a segunda, ao processo servidor substituidor e as demais
-    relacionadas aos processos de usuário na ordem em que foram
-    iniciados. Para sincornizar acesso a essa estrutura existe um
-    semáforo. O processo que quer escrever na tabela adquire o
-    semáforo, escreve e então o libera. A única sincronização
-    necessária é na hora que o processo é criado e ele precisa
-    adicionar uma entrada para ele na tabela. Depois disso o processo
-    guarda o index referente a si na tabela. Dois processos diferentes
-    terão portanto index na tabela diferente e portanto futuras
-    escritas e leituras não precisam ser sincronizadas já que lidarão
-    com entradas diferentes da tabela.
+Cada processo registra em seu construtor uma resposta ao sinal
+SIGUSR2. Ao receber esse sinal os processos de usuário, servidor
+de alocação e substituição de páginas encerram suas atividades
+imediatamente por meio da chamada exit.
 
-    Processos de usuários escrevem nessa tabela quando recebem
-    indicação de pagefault do server. A entrada de page fault count no
-    index do processo de alocação se refere ao número total de page
-    faults e é escrita pela processo alocador. A entrada referente
-    ao processo substituidor indica o número de vezes que esse
-    processo entrou em ação, isto é: o número de vezes que o processo
-    percebeu que haviam menos frames livres do que o estabelecido.
+Para que isso ocorra, o processo de shutdown precisa conhecer o
+PID dos processos que precisa encerrar. Para isso se utiliza ourta
+estrutura compartilhada: uma tabela em memória compartilhada
+contendo informação do PID de cada processo e informação de
+pagefault. 
+
+Nessa tabela a primeira entrada é referente ao processo servidor
+alocador; a segunda, ao processo servidor substituidor e as demais
+relacionadas aos processos de usuário na ordem em que foram
+iniciados. Para sincornizar acesso a essa estrutura existe um
+semáforo. O processo que quer escrever na tabela adquire o
+semáforo, escreve e então o libera. A única sincronização
+necessária é na hora que o processo é criado e ele precisa
+adicionar uma entrada para ele na tabela. Depois disso o processo
+guarda o index referente a si na tabela. Dois processos diferentes
+terão portanto index na tabela diferente e portanto futuras
+escritas e leituras não precisam ser sincronizadas já que lidarão
+com entradas diferentes da tabela.
+
+Processos de usuários escrevem nessa tabela quando recebem
+indicação de pagefault do server. A entrada de page fault count no
+index do processo de alocação se refere ao número total de page
+faults e é escrita pela processo alocador. A entrada referente
+ao processo substituidor indica o número de vezes que esse
+processo entrou em ação, isto é: o número de vezes que o processo
+percebeu que haviam menos frames livres do que o estabelecido.
 

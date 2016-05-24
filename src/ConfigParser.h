@@ -22,8 +22,11 @@ public:
     static void loadConfig(string filename);
 
     static int getInt(string name);
+
     static long getLong(string name);
+
     static string getString(string name);
+
     static double getDouble(string name);
 
 

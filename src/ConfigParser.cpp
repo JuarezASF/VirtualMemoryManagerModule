@@ -46,10 +46,10 @@ int ConfigParser::getInt(string name) {
         cerr << " CANNOT FIND CONFIG PARAMATER " << name << endl;
         return -1;
     }
-    string val = (string)config_map[name];
+    string val = (string) config_map[name];
     if (val.find("0x", 0) >= 0)
         return std::stoi(val.c_str(), 0, 16);
-    else if(val[0] == '0')
+    else if (val[0] == '0')
         return std::stoi(val.c_str(), 0, 8);
     else
         return std::stoi(val.c_str(), 0, 10);
@@ -62,11 +62,11 @@ long ConfigParser::getLong(string name) {
     }
     string val = config_map[name];
     if (val.find("0x", 0) >= 0)
-        return std::stol(((string)config_map[name]).c_str(), 0, 16);
-    else if(val[0] == '0')
-        return std::stol(((string)config_map[name]).c_str(), 0, 8);
+        return std::stol(((string) config_map[name]).c_str(), 0, 16);
+    else if (val[0] == '0')
+        return std::stol(((string) config_map[name]).c_str(), 0, 8);
     else
-        return std::stol(((string)config_map[name]).c_str(), 0, 10);
+        return std::stol(((string) config_map[name]).c_str(), 0, 10);
 }
 
 string ConfigParser::getString(string name) {
@@ -82,5 +82,5 @@ double ConfigParser::getDouble(string name) {
         cerr << " CANNOT FIND CONFIG PARAMATER " << name << endl;
         return -1;
     }
-    return stod(((string)config_map[name]).c_str());
+    return stod(((string) config_map[name]).c_str());
 }

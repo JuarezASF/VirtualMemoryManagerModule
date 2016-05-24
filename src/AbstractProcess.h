@@ -20,7 +20,7 @@ protected:
     ResourceManager *rm;
     jMessageQueue *serverRequestQueue, *serverAnserQueue;
     jLock *serverQueueLock, *pidTableLock;
-    PIDTable * pidTable;
+    PIDTable *pidTable;
 
 
     int idxOnPIDTable;

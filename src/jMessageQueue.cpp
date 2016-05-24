@@ -4,11 +4,7 @@
 
 #include "jMessageQueue.h"
 #include "AbstractProcess.h"
-#include <sys/sem.h>
 #include <sys/msg.h>
-#include <iostream>
-#include <string.h>
-#include <unistd.h>
 
 using namespace std;
 
@@ -94,6 +90,7 @@ jMessageQueue::AnswerMsg jMessageQueue::getAnswer(int msgId) {
 
     return m;
 }
+
 jMessageQueue::RequestMessage jMessageQueue::getRequest() {
     RequestMessage m;
     int length = sizeof(RequestMessage) - sizeof(long);
