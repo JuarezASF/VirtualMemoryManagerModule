@@ -4,94 +4,116 @@
 
 Alunos
 
-Gabriel Franklin Braz de Medeiros 15/0126387    gabriel.medeiros93@gmail.com
-
 Juarez Aires Sampaio Filho      11/0032829      juarez.asf@gmail.com
+
+Gabriel Franklin Braz de Medeiros 15/0126387    gabriel.medeiros93@gmail.com
 
 
 ## Trabalho 1 - Gerente de Memória Virtual
 
-1. Sistema de Desenvolvimente
+### 1. Sistema de Desenvolvimento
 
-    SO
-        Ubuntu 14.04.4 LTS
+* SO:
 
-    Kernel:
+    Ubuntu 14.04.4 LTS
+
+* Kernel:
     
-        Linux 3.16.0-71-generic x86_64
+    Linux 3.16.0-71-generic x86_64
         
-    Compilador:
+* Compilador:
     
-        g++ (Ubuntu 4.9.3-8ubuntu2~14.04) 4.9.3
+    g++ (Ubuntu 4.9.3-8ubuntu2~14.04) 4.9.3
 
 
-2. Instruções para compilação
+### 2. Instruções para compilação
 
- O projeto consiste de diversas classes e alguns executáveis que devem ser compilados e linkados corretamente. O 
- método recomendado para buildar o projeto é utilizando cmake. Fornece-se também instruções para compilar o projeto
- pela linha de comando.
-
-2.1 Compilação com cmake
-    versão do cmake utilizada: 
-
-        cmake version 3.5.0
-
-    Comandos:
-        apartir do diretório que contém esse readme:
-
-            mkdir build
-            cd build
-            cmake ..
-            make
+ O projeto consiste de diversas classes e alguns executáveis que devem
+ ser compilados e ligados corretamente. O método recomendado para
+ buildar o projeto é utilizando cmake. Fornece-se também instruções
+ para compilar o projeto pela linha de comando.
 
 
-2.2 Por linha de comando
+##### 2.0 Configurando
 
-    apartir do diretório que contém esse readme:
+Algumas configurações foram deixadas em aberto na descrição do
+trabalho como, por exemplo, o número de frames na tabela de paginação.
+Para configurar essa e outras propriedades, abra o arquivo 
+raiz/src/defines.h e edite os valores conforme desejado. Ler este
+arquivo para mais detalhes.
+
+
+##### 2.1 Compilação com cmake
+* versão do cmake utilizada: 
+
+    cmake version 3.5.0
+
+(essa é a versão que tenho instalada. Não utilizo nenhum
+comando avançado e acredito que qualquer versão posterior a
+2.7 deve funcionar)
+
+* Comandos:
+apartir do diretório que contém esse readme:
+
+    mkdir build
+    cd build
+    cmake ..
+    make
+
+os arquivos executados devem ter sidos gerados em:
+raiz/build/src/
+
+
+##### 2.2 Por linha de comando
+
+apartir do diretório que contém esse readme:
     
-        * compile todos os arquivos
+* compile todos os arquivos
         
-            cd src
-            for f in *.cpp; do; echo "compiling $f"; g++ --std=c++11 $f -c; done; 
+    cd src
+    for f in *.cpp; do; echo "compiling $f"; g++ --std=c++11 $f -c; done; 
             
-         * link os executáveis
+* link os executáveis
          
-            - servidor de alocação
+* servidor de alocação
             
-                g++ --std=c++11 startPageAllocationServer.o AbstractProcess.o ConfigParser.o j*.o PageAllocationServer.o  ResourceManager.o -o startPageAlloc 
+    g++ --std=c++11 startPageAllocationServer.o AbstractProcess.o ConfigParser.o j*.o PageAllocationServer.o  ResourceManager.o -o startPageAlloc 
          
-            - servidor de substituição
+- servidor de substituição
                 
-                g++ --std=c++11 startPageSubstitutionServer.o AbstractProcess.o ConfigParser.o j*.o PageAllocationServer.o  ResourceManager.o PageSubstitutionServer.o -o startPageSubst
+    g++ --std=c++11 startPageSubstitutionServer.o AbstractProcess.o ConfigParser.o j*.o PageAllocationServer.o  ResourceManager.o PageSubstitutionServer.o -o startPageSubst
           
-            - processo usuário
+- processo usuário
             
-                g++ --std=c++11 startUserProcess.o AbstractProcess.o ConfigParser.o j*.o  ResourceManager.o  UserProcess.o -o startUserProcess 
+    g++ --std=c++11 startUserProcess.o AbstractProcess.o ConfigParser.o j*.o  ResourceManager.o  UserProcess.o -o startUserProcess 
                 
-            - shutdown
+- shutdown
             
-                g++ --std=c++11 shutdownAll.o ConfigParser.o j*.o  ResourceManager.o   -o shutdownAll
+    g++ --std=c++11 shutdownAll.o ConfigParser.o j*.o  ResourceManager.o   -o shutdownAll
          
-         * organize as coisas
+* organize as coisas
          
-            mkdir ../bin
-            mv *.o ../bin
-            mv startPageAlloc ../bin
-            mv startPageSubst ../bin
-            mv startUserProcess ../bin
-            mv shutdownAll ../bin
+    mkdir ../bin
+    mv *.o ../bin
+    mv startPageAlloc ../bin
+    mv startPageSubst ../bin
+    mv startUserProcess ../bin
+    mv shutdownAll ../bin
             
-         Ao final os executáveis e os códigos objetos produzidos devem estar no diretório bin/
+ Ao final os executáveis e os códigos objetos produzidos devem estar
+ no diretório bin/
 
-3. Executando
+### 3. Executando
 
-Os programas buscam as chaves para as estruturas compartilhadas a partir de um mesmo arquivo de configuração
-"config.txt.". Por tanto, um arquivo com esse nome e com configurações válidas deve ser colocada na pasta
-onde os programas serão executas. Um arquivo de exemplo é fornecido no diretório data/.
+Os programas buscam as chaves para as estruturas compartilhadas a
+partir de um mesmo arquivo de configuração "config.txt.". Por tanto,
+um arquivo com esse nome e com configurações válidas deve ser colocada
+na pasta onde os programas serão executados. Um arquivo de exemplo é
+fornecido no diretório data/.
 
 Suponha que a estrutura do projeto esteja assim:
 
-     raiz/
+    raiz/
         src/
         data/
         build/
@@ -106,31 +128,31 @@ e os executáveis estejam dentro de raiz/build/src. Se você estiver em raiz/ fa
 
 3.1 Ordem de execução dos Programas
 
-    Deve-se executar:
-    
-    1. Processo servidor de alocação de páginas
-        
-        ./startPageAlloc
-        
-    Esse proceso, por saber que é o primeiro, irá criar todos os recursos compartilhados supondo
-    que eles aidna não existem. Os demais processos assumem que os recursos já foram criados.
-        
-    2. Processo subsitituidor de página
-    
-        ./startPageSubst
-        
-    3. Processos de usuário
-    
-        ./startUserProcess page_process_N.txt
-        
-     O processo de usuário lê do primeiro argumento da linha de comando o nome do arquivo com
-     as informações das páginas que deve referencias.
-     
-     4. Processo shutdown
-     
-        ./shutdownAll
+Deve-se executar:
 
-4. Descrição da comunicação entre os processos.
+1. Processo servidor de alocação de páginas
+        
+    ./startPageAlloc
+        
+Esse proceso, por saber que é o primeiro, irá criar todos os recursos compartilhados supondo
+que eles aidna não existem. Os demais processos assumem que os recursos já foram criados.
+        
+2. Processo subsitituidor de página
+    
+    ./startPageSubst
+        
+3. Processos de usuário
+    
+    ./startUserProcess page_process_N.txt
+        
+O processo de usuário lê do primeiro argumento da linha de comando o nome do arquivo com
+as informações das páginas que deve referencias.
+     
+4. Processo shutdown
+     
+    ./shutdownAll
+
+##### 4. Descrição da comunicação entre os processos.
 
 4.1 Processo usuário <-> servidor de alocação de mensagem
 

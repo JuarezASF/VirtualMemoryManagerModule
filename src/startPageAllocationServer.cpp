@@ -1,18 +1,14 @@
 //
 // Created by jasf on 5/23/16.
-//
+// ver readme.md para informações
 
 
 #include <stdlib.h>
 #include <unistd.h>
 #include <iostream>
 #include <sys/wait.h>
-#include <unordered_map>
-#include <set>
-#include "defines.h"
 #include "UserProcess.h"
 #include "PageAllocationServer.h"
-#include "PageSubstitutionServer.h"
 
 using namespace std;
 
