@@ -2,15 +2,10 @@
 // Created by jasf on 5/23/16.
 //
 #include <stdlib.h>
-#include <unistd.h>
 #include <iostream>
 #include <sys/wait.h>
-#include <unordered_map>
-#include <set>
 #include "defines.h"
 #include "UserProcess.h"
-#include "PageAllocationServer.h"
-#include "PageSubstitutionServer.h"
 
 using namespace std;
 
@@ -27,9 +22,7 @@ int main(int argc, char **argv) {
 
     PIDTable *pidTable = rm->getPIDTable();
 
-    rm->printPIDTable();
-
-    for (uint k = 0; k <  pidTable->qtdUsedEntries; k++ ){
+    for (uint k = 0; k < pidTable->qtdUsedEntries; k++) {
         long toKillPid = pidTable->pids[k];
 
         kill(toKillPid, SIGUSR2);
@@ -37,8 +30,8 @@ int main(int argc, char **argv) {
 
     cout << "[Required Execution Log]start" << endl;
 
-    for (uint k = 2; k < pidTable->qtdUsedEntries; k++){
-        cout << "Numero de page faults do processo " << k-2 << ":" << pidTable->pageFaultCount[k] << endl;
+    for (uint k = 2; k < pidTable->qtdUsedEntries; k++) {
+        cout << "Numero de page faults do processo " << k - 2 << ":" << pidTable->pageFaultCount[k] << endl;
 
     }
 
@@ -48,9 +41,9 @@ int main(int argc, char **argv) {
 
     PageFrameTable *t = rm->getTable();
     cout << "Configuracao final da memoria" << endl;
-    cout << "Pagina\tTempo(relativo) de referencia" << endl;
-    for (uint k = 0; k < NUMERO_FRAMES; k++){
-        cout << t->table[k].page << "\t" << t->table[k].timestamp - pidTable->initialTimestamp << endl;
+    cout << "Frame\t\tPagina\t\t\tTempo(relativo) de referencia" << endl;
+    for (uint k = 0; k < NUMERO_FRAMES; k++) {
+        cout << k << "\t" << ((t->table[k].occupied)? to_string(t->table[k].page) : "Livre") << "\t" << t->table[k].timestamp << endl;
 
     }
 

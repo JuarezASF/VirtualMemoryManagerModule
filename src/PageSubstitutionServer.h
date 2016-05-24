@@ -10,8 +10,13 @@
 class PageSubstitutionServer : public PageAllocationServer{
 public:
     PageSubstitutionServer();
-    int qtdSubstituitonTookPlace;
-
+    /**
+     * Page substitution main loop:
+     *
+     * every X microseconds, check the number of occupied frames. If it is greater o equal to
+     * MAX_OCUPACAO starts to remove the oldest entries one at a time untill ocuppation reaches
+     * OCUPACAO_OK
+     */
     void run();
 
 

@@ -10,6 +10,7 @@ PageAllocationServer::PageAllocationServer(bool zeroOutTable) : AbstractProcess(
 
     table = rm->getTable();
     tableLock = rm->getTableLock();
+    timeCounter = 0;
 
     //zero out table
     if (zeroOutTable) {
@@ -17,7 +18,7 @@ PageAllocationServer::PageAllocationServer(bool zeroOutTable) : AbstractProcess(
         for (int k = 0; k < NUMERO_FRAMES; k++) {
             table->table[k].page = 0;
             table->table[k].occupied = false;
-            table->table[k].timestamp = 0X7FFFFFFFFFFFFFFFL;
+            table->table[k].timestamp = 0;
         }
 
     }
@@ -25,8 +26,6 @@ PageAllocationServer::PageAllocationServer(bool zeroOutTable) : AbstractProcess(
     //it does not make sense to keep page count for allocation and substitution server
     PIDTable * pidTable = rm->getPIDTable();
     pidTable->pageFaultCount[idxOnPIDTable] = 0;
-
-    cout << logStr << "started" << endl;
 
 }
 
@@ -38,17 +37,17 @@ void PageAllocationServer::run() {
         bool pageFault = false;
         int allocatedFrame;
         int page = r.page;
-        flush(cout);
-        cout << "table before request for page " << page << endl;
-        printTable();
 
+        //table read operations are synchronized: we don't want the substitution server writing while we're reading
         tableLock->acquire();
         frameInfo info = getFrameForPage(page);
         tableLock->release();
+
         pageFault = info.pagefault;
         allocatedFrame = info.frame;
         if(info.pagefault){
             cout << logStr << "PAGE FAULT on request for page " << page << endl;
+
             //increase count on total pagefault count at the PIDTable
             pidTableLock->acquire();
             pidTable->pageFaultCount[idxOnPIDTable] += 1;
@@ -59,6 +58,7 @@ void PageAllocationServer::run() {
                 allocatedFrame = emptyOldestPage();
             }
             if (allocatedFrame < 0) {
+                // should never happens(if we caught all bugs)
                 cerr << "TREMENDOUS ERROR! FIX ME" << endl;
                 allocatedFrame = 0;
             }
@@ -79,7 +79,7 @@ void PageAllocationServer::run() {
 PageAllocationServer::frameInfo PageAllocationServer::getFrameForPage(int page) {
     int out = -1;
 
-    for (int k = 0; k < NUMERO_FRAMES; k++) {
+    for (int k = NUMERO_FRAMES - 1; k >= 0; k--) {
         if (table->table[k].page == page && table->table[k].occupied)
             return PageAllocationServer::frameInfo(k, false);
         if (!table->table[k].occupied)
@@ -93,6 +93,7 @@ int PageAllocationServer::emptyOldestPage() {
     long oldest = 0x7FFFFFFFFFFFFFFFL;
     int oldestIdx = -1;
 
+    //since we're to change the table, we synchronize the access
     tableLock->acquire();
 
     for (int k = 0; k < NUMERO_FRAMES; k++) {
@@ -103,8 +104,13 @@ int PageAllocationServer::emptyOldestPage() {
     }
 
     if (oldestIdx >= 0) {
-        table->table[oldestIdx].occupied = false;
-        table->qtdFree++;
+        if (table->table[oldestIdx].occupied){
+            table->table[oldestIdx].occupied = false;
+            table->qtdFree += 1;
+        }
+        else{
+            cerr <<logStr << "ERROR! TRYING TO FREE A NON OCCUPIED FRAME! THIS IS PROBABLY AN ERROR!" << endl;
+        }
     }
     else {
 
@@ -119,10 +125,14 @@ void PageAllocationServer::markFrameAsOcupied(int frame, int page) {
         cerr << "TREMENDOUS ERROR! FIX ME" << endl;
         frame = 0;
     }
+    tableLock->acquire();
     table->table[frame].page = page;
+    table->table[frame].timestamp = timeCounter++;
+    if(!table->table[frame].occupied){
+        table->qtdFree -= 1;
+    }
     table->table[frame].occupied = true;
-    table->table[frame].timestamp = (long) time(NULL);
-    table->qtdFree--;
+    tableLock->release();
 
 }
 

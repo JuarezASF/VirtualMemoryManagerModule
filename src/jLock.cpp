@@ -30,16 +30,12 @@ void jLock::create(int key) {
         cerr << strerror(errno) << endl;
         exit(0);
     }
-    cout << "created sem: OK key: " << key << endl;
-
     semun setTo1;
     setTo1.val = 1;
 
     if (semctl(semid, 0, SETVAL, setTo1) < 0) {
         cerr << strerror(errno) << endl;
     }
-
-    cout << "initial val of sem is:" << getCurrentVal() << endl;
 
 
 }

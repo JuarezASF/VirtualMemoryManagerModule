@@ -38,8 +38,6 @@ int main(int argc, char **argv) {
         p->initialTimestamp = time(NULL);
         rm->getPIDTableLock()->release();
 
-        rm->printPIDTable();
-
         exit(0);
     }else{
         int s;

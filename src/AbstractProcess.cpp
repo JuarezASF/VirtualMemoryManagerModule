@@ -20,23 +20,26 @@ AbstractProcess::AbstractProcess() {
     rm = ResourceManager::getInstance("config.txt");
     rm->startAllResources();
 
-    //initiate strucuter shared by all process
+    //initiate fields shared by all process
     serverRequestQueue = rm->getServerRequestQueue();
     serverAnserQueue = rm->getServerAnswertQueue();
     serverQueueLock = rm->getServerRequestLock();
+    pidTable = rm->getPIDTable();
+    pidTableLock = rm->getTableLock();
 
     //always good to have this information available
     pid = getpid();
     ppid = getppid();
 
-    // add entry on PIDTable regarding this process
-    pidTable = rm->getPIDTable();
-    pidTableLock = rm->getTableLock();
+    //add pid on shared pid table
+    //synchronized since we're adding new entries to shared pid table
     pidTableLock->acquire();
-    idxOnPIDTable = pidTable->qtdUsedEntries;
-    pidTable->pids[idxOnPIDTable] = getpid();
-    pidTable->pageFaultCount[idxOnPIDTable] = 0;
-    pidTable->qtdUsedEntries++;
+
+        idxOnPIDTable = pidTable->qtdUsedEntries;
+        pidTable->pids[idxOnPIDTable] = getpid();
+        pidTable->pageFaultCount[idxOnPIDTable] = 0;
+        pidTable->qtdUsedEntries++;
+
     pidTableLock->release();
 
 

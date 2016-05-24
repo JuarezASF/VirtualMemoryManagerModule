@@ -13,8 +13,6 @@ using namespace std;
 PageSubstitutionServer::PageSubstitutionServer() : PageAllocationServer(false) {
     logStr = "[page subst server]";
 
-    qtdSubstituitonTookPlace = 0;
-
     cout << logStr << "started" << endl;
 }
 
@@ -25,18 +23,19 @@ void PageSubstitutionServer::run() {
             cerr << strerror(errno) << endl;
         }
 
-        if ((NUMERO_FRAMES - table->qtdFree) >= MAX_OCUPACAO) {
-            cout << logStr << "starting to free some space" << endl;
-            qtdSubstituitonTookPlace++;
-            //keep count of time the subsititution took place also inside the shared table
+        if ((NUMERO_FRAMES - table->qtdFree) > MAX_OCUPACAO) {
+            cout << logStr << "Need to free some space! Current ocupation is:" << NUMERO_FRAMES - table->qtdFree <<
+            endl;
+
+            //keep count of time the substitution took place inside the shared table
             pidTableLock->acquire();
             pidTable->pageFaultCount[idxOnPIDTable] += 1;
             pidTableLock->release();
-            while ((NUMERO_FRAMES - table->qtdFree) >= OCUPACAO_OK){
-                printTable();
-                this->emptyOldestPage();
 
+            while ((NUMERO_FRAMES - table->qtdFree) > OCUPACAO_OK) {
+                this->emptyOldestPage();
             }
+            cout << logStr << "Done! Current ocupation is:" << NUMERO_FRAMES - table->qtdFree << endl;
         }
 
     }

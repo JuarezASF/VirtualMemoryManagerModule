@@ -42,7 +42,11 @@ void UserProcess::referencia_pagina(int page) {
 
     jMessageQueue::AnswerMsg a = serverAnserQueue->getAnswer(this->pid);
 
-    cout << logStr << "page " << page << " mapped to frame " << a.frame << " with pagefault " << ((a.pagefault)? "TRUE" : "FALSE") << endl;
+    cout << logStr << "page " << page << " mapped to frame " << a.frame;
+    if(a.pagefault)
+        cout << " with pagefault";
+    cout << endl;
+
     if (a.pagefault){
         // increase pagefault count on this user process
         rm->getPIDTableLock()->acquire();
@@ -50,7 +54,6 @@ void UserProcess::referencia_pagina(int page) {
         rm->getPIDTableLock()->release();
 
     }
-    flush(cout);
     serverQueueLock->release();
 
 }
