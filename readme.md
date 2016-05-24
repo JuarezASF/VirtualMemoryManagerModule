@@ -15,15 +15,15 @@ Gabriel Franklin Braz de Medeiros 15/0126387    gabriel.medeiros93@gmail.com
 
 * SO:
 
-    Ubuntu 14.04.4 LTS
+    	Ubuntu 14.04.4 LTS
 
 * Kernel:
     
-    Linux 3.16.0-71-generic x86_64
+    	Linux 3.16.0-71-generic x86_64
         
 * Compilador:
     
-    g++ (Ubuntu 4.9.3-8ubuntu2~14.04) 4.9.3
+    	g++ (Ubuntu 4.9.3-8ubuntu2~14.04) 4.9.3
 
 
 ### 2. Instruções para compilação
@@ -46,7 +46,7 @@ arquivo para mais detalhes.
 ##### 2.1 Compilação com cmake
 * versão do cmake utilizada: 
 
-    cmake version 3.5.0
+    	cmake version 3.5.0
 
 (essa é a versão que tenho instalada. Não utilizo nenhum
 comando avançado e acredito que qualquer versão posterior a
@@ -55,10 +55,10 @@ comando avançado e acredito que qualquer versão posterior a
 * Comandos:
 apartir do diretório que contém esse readme:
 
-    mkdir build
-    cd build
-    cmake ..
-    make
+        mkdir build
+    	cd build
+    	cmake ..
+    	make
 
 os arquivos executados devem ter sidos gerados em:
 raiz/build/src/
@@ -70,36 +70,37 @@ apartir do diretório que contém esse readme:
     
 * compile todos os arquivos
         
-    cd src
-    for f in *.cpp; do; echo "compiling $f"; g++ --std=c++11 $f -c; done; 
+        cd src
+        for f in *.cpp; do; echo "compiling $f"; g++ --std=c++11 $f -c; done; 
             
 * link os executáveis
          
 * servidor de alocação
             
-    g++ --std=c++11 startPageAllocationServer.o AbstractProcess.o ConfigParser.o j*.o PageAllocationServer.o  ResourceManager.o -o startPageAlloc 
+        g++ --std=c++11 startPageAllocationServer.o AbstractProcess.o ConfigParser.o j*.o PageAllocationServer.o  ResourceManager.o -o startPageAlloc 
          
 - servidor de substituição
                 
-    g++ --std=c++11 startPageSubstitutionServer.o AbstractProcess.o ConfigParser.o j*.o PageAllocationServer.o  ResourceManager.o PageSubstitutionServer.o -o startPageSubst
+        g++ --std=c++11 startPageSubstitutionServer.o AbstractProcess.o ConfigParser.o j*.o PageAllocationServer.o  ResourceManager.o PageSubstitutionServer.o -o startPageSubst
           
 - processo usuário
             
-    g++ --std=c++11 startUserProcess.o AbstractProcess.o ConfigParser.o j*.o  ResourceManager.o  UserProcess.o -o startUserProcess 
+        g++ --std=c++11 startUserProcess.o AbstractProcess.o ConfigParser.o j*.o  ResourceManager.o  UserProcess.o -o startUserProcess 
                 
 - shutdown
             
-    g++ --std=c++11 shutdownAll.o ConfigParser.o j*.o  ResourceManager.o   -o shutdownAll
+        g++ --std=c++11 shutdownAll.o ConfigParser.o j*.o  ResourceManager.o   -o shutdownAll
          
 * organize as coisas
          
-    mkdir ../bin
-    mv *.o ../bin
-    mv startPageAlloc ../bin
-    mv startPageSubst ../bin
-    mv startUserProcess ../bin
-    mv shutdownAll ../bin
-            
+		mkdir ../bin
+		mv *.o ../bin
+      	mv startPageAlloc ../bin
+     	mv startPageSubst ../bin
+     	mv startUserProcess ../bin
+     	mv shutdownAll ../bin
+  
+          
  Ao final os executáveis e os códigos objetos produzidos devem estar
  no diretório bin/
 
@@ -113,16 +114,16 @@ fornecido no diretório data/.
 
 Suponha que a estrutura do projeto esteja assim:
 
-    raiz/
-        src/
-        data/
-        build/
-            src/
+   	raiz/
+        	src/
+        	data/
+        	build/
+            		src/
 
 e os executáveis estejam dentro de raiz/build/src. Se você estiver em raiz/ faça
 
-     cp data/config.txt build/src
-     cd build/src
+    cp data/config.txt build/src
+    cd build/src
      
 
 
